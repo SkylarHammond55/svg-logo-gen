@@ -32,3 +32,63 @@ function writeToFile(answers) {
       err ? console.log(err) : console.log(`Generated ${logoName}.svg`);
   });
 }
+
+// questions function that asks for input from the user
+function questions() {
+  inquirer
+      .prompt([
+          // Text
+          {
+              type: 'input',
+              message: 'Enter up to three characters for the logo',
+              name: 'text',
+          },
+          // Text Color
+          {
+              type: 'input',
+              message: 'Choose text color for the logo (color keyword OR a hexadecimal number)',
+              name: 'textColor',
+          },
+          // Shape
+          {
+              type: 'list',
+              message: 'Choose a shape for the logo',
+              choices: ['Square', 'Circle', 'Triangle'],
+              name: 'shape',
+          },
+          // Shape Color
+          {
+              type: 'input',
+              message: 'Choose shape color for the logo (color keyword OR a hexadecimal number)',
+              name: 'shapeColor',
+          },
+          // Logo Width
+          {
+              type: 'input',
+              message: 'Enter the width of the logo',
+              name: 'logoWidth',
+              default: width,
+          },
+          // Logo Height
+          {
+              type: 'input',
+              message: 'Enter the height of the logo',
+              name: 'logoHeight',
+              default: height,
+          },
+      ])
+      .then((answers) => {
+          // Error handling for text
+          if (answers.text.length > 3) {
+              console.log('Please have no more than 3 characters');
+              questions();
+          } else {
+              width = parseInt(answers.logoWidth);
+              height = parseInt(answers.logoHeight);
+              writeToFile(answers);
+          }
+      });
+}
+
+// Initiate
+questions();
